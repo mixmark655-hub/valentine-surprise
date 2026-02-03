@@ -11,47 +11,34 @@
         :root {
             --primary-pink: #ff8fa3;
             --dark-pink: #c9184a;
-            --bg-color: #fff0f5; /* สีพื้นหลังชมพูอ่อน */
+            --bg-color: #fff0f5;
             --text-color: #590d22;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Prompt', sans-serif; /* ใช้ฟอนต์ Prompt เพื่อความทันสมัยและน่ารัก */
+            font-family: 'Prompt', sans-serif;
             background-color: var(--bg-color);
             background-image: radial-gradient(#ffccd5 1px, transparent 1px);
-            background-size: 20px 20px; /* ลายจุดเล็กๆ น่ารักที่พื้นหลัง */
+            background-size: 20px 20px;
             color: var(--text-color);
-            height: 100vh;
-            overflow: hidden; /* ป้องกันการเลื่อนหน้าจอ */
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            min-height: 100vh; /* ความสูงขั้นต่ำเต็มจอ */
+            overflow-x: hidden; /* ซ่อนเฉพาะแนวนอน */
+            overflow-y: auto;   /* อนุญาตให้เลื่อนแนวตั้งได้ */
             position: relative;
         }
 
-        /* --- อนิเมชั่นหัวใจลอยที่พื้นหลัง --- */
+        /* --- อนิเมชั่นหัวใจลอยที่พื้นหลัง (เปลี่ยนเป็น Fixed เพื่อให้ลอยตามเวลาเลื่อน) --- */
         .floating-hearts-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
+            position: fixed; /* ตรึงอยู่กับที่ */
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
         }
 
         .heart {
-            position: absolute;
-            bottom: -50px;
-            font-size: 2rem;
-            color: rgba(255, 143, 163, 0.5);
+            position: absolute; bottom: -50px;
+            font-size: 2rem; color: rgba(255, 143, 163, 0.5);
             animation: floatUp linear infinite;
         }
 
@@ -63,105 +50,79 @@
         /* --- คอนเทนเนอร์หลัก --- */
         .main-container {
             position: relative;
-            width: 90%;
-            max-width: 500px;
-            height: 80vh;
+            width: 100%;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10;
+            padding: 20px; /* เพิ่มขอบกันติดจอ */
         }
 
         /* --- สไตล์ของสไลด์ --- */
         .slide {
-            position: absolute;
+            /* เปลี่ยนจาก Absolute เป็น Relative เพื่อให้ดันความสูงหน้าเว็บ */
+            display: none; /* ซ่อนไว้ก่อน */
             width: 100%;
-            display: flex;
+            max-width: 500px;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            opacity: 0;
-            transform: scale(0.8) translateY(50px);
-            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* เอฟเฟกต์เด้งดึ๋ง */
-            pointer-events: none; /* ป้องกันการกดตอนที่ยังไม่แสดง */
+            animation: fadeIn 0.8s ease-out;
+            padding-bottom: 50px; /* เผื่อที่ด้านล่างให้เลื่อนสะดวก */
         }
 
         .slide.active {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-            pointer-events: auto;
+            display: flex; /* แสดงเมื่อเป็น active */
         }
 
-        /* สไตล์ตอนสไลด์กำลังออก */
-        .slide.exit {
-            opacity: 0;
-            transform: scale(1.1) translateY(-50px);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* --- กรอบรูปภาพ --- */
         .photo-frame {
-            background: white;
-            padding: 12px;
-            border-radius: 20px;
+            background: white; padding: 12px; border-radius: 20px;
             box-shadow: 0 8px 20px rgba(255, 105, 180, 0.2);
-            margin-bottom: 25px;
-            transform: rotate(-2deg); /* เอียงนิดๆ ให้ดูขี้เล่น */
+            margin-bottom: 25px; width: 100%;
+            transform: rotate(-2deg);
         }
 
         .photo-frame img {
-            width: 100%;
-            max-height: 350px;
-            object-fit: cover;
-            border-radius: 15px;
-            display: block;
+            width: 100%; max-height: 400px; /* เพิ่มความสูงรูปได้ */
+            object-fit: cover; border-radius: 15px; display: block;
         }
 
         /* --- ข้อความ --- */
         h1 {
-            font-family: 'Sriracha', cursive; /* ใช้ฟอนต์ลายมือสำหรับหัวข้อ */
-            font-size: 1.8rem;
-            margin-bottom: 30px;
-            line-height: 1.5;
-            color: var(--dark-pink);
-            text-shadow: 2px 2px 0px #fff;
+            font-family: 'Sriracha', cursive;
+            font-size: 1.6rem; /* ปรับขนาดให้พอดีมือถือ */
+            margin-bottom: 30px; line-height: 1.6;
+            color: var(--dark-pink); text-shadow: 2px 2px 0px #fff;
         }
 
-        /* --- ปุ่มกดไปต่อ --- */
+        /* --- ปุ่ม --- */
         .btn-next {
             background: linear-gradient(45deg, var(--primary-pink), var(--dark-pink));
-            color: white;
-            border: none;
-            padding: 12px 40px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
+            color: white; border: none; padding: 12px 40px;
+            font-size: 1.2rem; border-radius: 50px; cursor: pointer;
             font-family: 'Prompt', sans-serif;
             box-shadow: 0 5px 15px rgba(201, 24, 74, 0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
+            margin-top: 10px;
         }
-
-        .btn-next:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(201, 24, 74, 0.4);
-        }
-
-        .btn-next:active {
-            transform: scale(0.98);
-        }
-
-        /* ปุ่มสุดท้ายให้เด่นหน่อย */
+        .btn-next:active { transform: scale(0.95); }
+        
         .btn-final {
             background: linear-gradient(45deg, #ff0000, #ff4d6d);
-            font-weight: bold;
-            animation: pulse 1.5s infinite;
+            font-weight: bold; animation: pulse 1.5s infinite;
         }
-
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.7); }
             70% { box-shadow: 0 0 0 15px rgba(255, 77, 109, 0); }
             100% { box-shadow: 0 0 0 0 rgba(255, 77, 109, 0); }
         }
-
     </style>
 </head>
 <body>
@@ -171,31 +132,31 @@
     <div class="main-container">
         <div class="slide active" id="slide1">
             <div class="photo-frame">
-                <img src="S__1114121_0.jpg" alt="Our Memory 1">
+                <img src="S__1114121_0.jpg" alt="Memory 1">
             </div>
             <h1>ขอบคุณที่เข้ามาเป็นส่วนหนึ่ง<br>ในชีวิตนะคะอ้วน 🩷</h1>
-            <button class="btn-next" onclick="changeSlide(1, 2)">ไปต่อกันเลย 👉</button>
+            <button class="btn-next" onclick="nextSlide(1, 2)">ไปต่อกันเลย 👉</button>
         </div>
 
         <div class="slide" id="slide2">
             <div class="photo-frame" style="transform: rotate(2deg);">
-                <img src="S__1114125_0.jpg" alt="Our Memory 2">
+                <img src="S__1114125_0.jpg" alt="Memory 2">
             </div>
             <h1>แม้เค้าจะไม่ได้ดีที่สุด<br>แต่เค้าก็พูดได้เต็มปากเลยว่า<br><strong>"เค้ารักอ้วนที่สุดเลยนะ"</strong></h1>
-            <button class="btn-next" onclick="changeSlide(2, 3)">อ่านต่อนะ 🥰</button>
+            <button class="btn-next" onclick="nextSlide(2, 3)">อ่านต่อนะ 🥰</button>
         </div>
 
         <div class="slide" id="slide3">
             <div class="photo-frame">
-                <img src="S__1114126_0.jpg" alt="Our Memory 3">
+                <img src="S__1114126_0.jpg" alt="Memory 3">
             </div>
             <h1>เค้าแสดงออกไม่ค่อยเก่ง พูดไม่ค่อยเป็น<br>แต่เค้าก็มีวิธีแสดงความรัก<br>ในแบบของเค้า 😊</h1>
-            <button class="btn-next" onclick="changeSlide(3, 4)">หน้าสุดท้ายแล้ว...</button>
+            <button class="btn-next" onclick="nextSlide(3, 4)">หน้าสุดท้ายแล้ว...</button>
         </div>
 
         <div class="slide" id="slide4">
             <div class="photo-frame" style="transform: rotate(1deg);">
-                <img src="S__1114127_0.jpg" alt="Our Memory 4">
+                <img src="S__1114127_0.jpg" alt="Memory 4">
             </div>
             <h1>สุดท้ายนี้ เค้ารักอ้วนมากๆนะ<br>เค้าจะคอยดูอ้วนเติบโต และประสบความสำเร็จ<br>อยู่ด้วยกันตลอดไปเลยนะ 💖</h1>
             <button class="btn-next btn-final" onclick="finalSurprise()">กดตรงนี้สิอ้วน! 🎉</button>
@@ -205,17 +166,13 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <script>
-        // --- ฟังก์ชันสร้างหัวใจลอยที่พื้นหลัง ---
         function createBgHearts() {
             const container = document.getElementById('bgHearts');
             const hearts = ['❤', '💖', '💕', '💗'];
-            
-            // สร้างหัวใจ 25 ดวง
             for (let i = 0; i < 25; i++) {
                 const heart = document.createElement('div');
                 heart.classList.add('heart');
                 heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
-                // สุ่มตำแหน่ง ขนาด และความเร็ว
                 heart.style.left = Math.random() * 100 + 'vw';
                 heart.style.animationDuration = (Math.random() * 5 + 8) + 's';
                 heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
@@ -223,64 +180,31 @@
                 container.appendChild(heart);
             }
         }
-        createBgHearts(); // เรียกใช้งานฟังก์ชันทันที
+        createBgHearts();
 
-        // --- ฟังก์ชันเปลี่ยนสไลด์ ---
-        function changeSlide(currentNum, nextNum) {
-            const currentSlide = document.getElementById('slide' + currentNum);
-            const nextSlide = document.getElementById('slide' + nextNum);
-
-            // เพิ่ม class 'exit' เพื่อเล่นอนิเมชั่นขาออก
-            currentSlide.classList.add('exit');
-            currentSlide.classList.remove('active');
-
-            // รอให้อนิเมชั่นขาออกเล่นจบ (800ms) แล้วค่อยแสดงสไลด์ถัดไป
-            setTimeout(() => {
-                nextSlide.classList.add('active');
-                currentSlide.classList.remove('exit'); // รีเซ็ต class exit
-            }, 800);
+        function nextSlide(current, next) {
+            document.getElementById('slide' + current).classList.remove('active');
+            const nextEl = document.getElementById('slide' + next);
+            nextEl.classList.add('active');
+            
+            // เลื่อนหน้าจอขึ้นไปด้านบนสุดอัตโนมัติ เวลาเปลี่ยนสไลด์
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // --- ฟังก์ชันระเบิดหัวใจหน้าสุดท้าย ---
         function finalSurprise() {
-            // ยิงพลุหัวใจชุดใหญ่
-            var duration = 3 * 1000; // ระเบิดนาน 3 วินาที
+            var duration = 3 * 1000;
             var end = Date.now() + duration;
-
             (function frame() {
-                // ยิงจากซ้าย
-                confetti({
-                    particleCount: 5,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    shapes: ['heart'],
-                    colors: ['#ff0000', '#ff69b4', '#ffffff']
-                });
-                // ยิงจากขวา
-                confetti({
-                    particleCount: 5,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    shapes: ['heart'],
-                    colors: ['#ff0000', '#ff69b4', '#ffffff']
-                });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, shapes: ['heart'], colors: ['#ff0000', '#ff69b4', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, shapes: ['heart'], colors: ['#ff0000', '#ff69b4', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
             }());
 
-            // เปลี่ยนข้อความปุ่มหลังจากกดแล้ว
-            const finalBtn = document.querySelector('.btn-final');
-            finalBtn.innerText = "รักนะจุ๊บๆ 😘";
-            finalBtn.disabled = true; // ป้องกันการกดซ้ำรัวๆ
-            finalBtn.style.background = "#ccc";
-            finalBtn.style.boxShadow = "none";
-            finalBtn.style.animation = "none";
+            const btn = document.querySelector('.btn-final');
+            btn.innerText = "รักนะจุ๊บๆ 😘";
+            btn.style.background = "#ccc";
+            btn.style.animation = "none";
         }
-
     </script>
 </body>
 </html>
